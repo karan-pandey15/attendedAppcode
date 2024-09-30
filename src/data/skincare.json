@@ -1,0 +1,64 @@
+{
+    "skincare": [
+        {
+            "id": 1,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg1.b503c52e.webp&w=1080&q=75",
+            "title": "Fair Cream",
+            "price": 499
+        },
+        {
+            "id": 2,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Fair Cream",
+            "price": 399.99
+        },
+        {
+            "id": 3,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg3.7524a611.webp&w=1080&q=75",
+            "title": "Winter Cream",
+            "price": 499.99
+        },
+        {
+            "id": 4,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Cream",
+            "price": 929 
+        },
+        {
+            "id": 5,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg1.b503c52e.webp&w=1080&q=75",
+            "title": "Winter Cream",
+            "price": 590.99
+        },
+        {
+            "id": 6,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Smash Skin care",
+            "price": 749 
+        },
+        {
+            "id": 7,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Summer Cream",
+            "price": 769.99
+        },
+        {
+            "id": 8,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Teanser Skin Care",
+            "price": 429.99
+        },
+        {
+            "id": 9,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Wool Cream",
+            "price": 393.99
+        },
+        {
+            "id": 10,
+            "image": "https://stylishhimclient.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FcartImg2.ed00cef7.webp&w=1080&q=75",
+            "title": "Parka",
+            "price": 129.99
+        } 
+    ]
+}
