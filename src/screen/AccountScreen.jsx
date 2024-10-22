@@ -7,22 +7,29 @@ import { fonts } from "../utils/fonts";
 const AccountScreen = () => {
   const navigation = useNavigation();
   const [auth, setAuth] = useState(false);
+  const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+ 
 
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
-        const response = await fetch('https://api.stylishhim.com/api/get_customer_data', {
+        const token = await AsyncStorage.getItem('token'); // Get token from AsyncStorage
+        const response = await fetch('http://172.20.64.1:5000/api/users/profile', {
           method: 'GET',
-          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Include the token in the request
+          },
         });
 
         const res = await response.json();
 
-        if (res.Status === 'Success') {
+        if (res._id) { // Check if user data is returned
           setAuth(true);
+          setUserId(res.userId); // Get userId from the response
           setName(res.name);
           setEmail(res.email);
           setPhone(res.phone);
@@ -37,24 +44,10 @@ const AccountScreen = () => {
     fetchCustomerData();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('https://api.stylishhim.com/api/cust_logout', {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      const res = await response.json();
-
-      if (res.Status === 'Success') {
-        await AsyncStorage.clear();
-        setAuth(false);
-        navigation.navigate('signup');
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const handleLogout = async () => { 
+    navigation.navigate('UserSignin'); // Navigate to the login screen
+    AsyncStorage.clear()
+};
 
   const handleBack = () => {
     navigation.navigate("HOME");
@@ -101,6 +94,8 @@ const AccountScreen = () => {
         />
         <Text style={styles.textHeading}>{auth ? name : "Undefined"}</Text>
       </View>
+
+      {/* <Text style={styles.userIdText}>User ID: {auth ? user : "Undefined"}</Text> */}
 
       <View style={styles.details}>
         <Text style={styles.detailsTxt}>{auth ? phone : "Undefined"}</Text>
@@ -185,6 +180,7 @@ const AccountScreen = () => {
 };
 
 export default AccountScreen;
+ 
 
 const styles = StyleSheet.create({
   container: {
@@ -233,6 +229,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 15,
   },
+  userIdText: {
+    color: "#111",
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+    marginTop: 10,
+  },
   details: {
     marginTop: 30,
     borderBottomWidth: 1,
@@ -273,6 +276,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
+    marginBottom: 10,
   },
   logoutContainer: {
     flexDirection: "row",
@@ -285,13 +289,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoutButton: {
-    backgroundColor: "#007BFF", // Blue color for logout
+    backgroundColor: "#FF4C4C", // Red color for logout
     padding: 15,
     borderRadius: 10,
     marginTop: 20,
     elevation: 5,
-    shadowColor: "#007BFF",
-    shadowOpacity: 0.3,
+    shadowColor: "#FF4C4C",
+    shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
   },
@@ -299,23 +303,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#007BFF", // Blue color for login
     padding: 15,
     borderRadius: 10,
-    marginTop: 50,
-    marginBottom:20,
+    marginTop: 20,
     elevation: 5,
     shadowColor: "#007BFF",
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
-
   },
   logoutTxt: {
+    color: "#fff",
     fontWeight: "bold",
-    color: "#FFFFFF",
     fontSize: 18,
   },
   loginTxt: {
+    color: "#fff",
     fontWeight: "bold",
-    color: "#FFFFFF",
     fontSize: 18,
   },
 });

@@ -1,13 +1,6 @@
- 
-
-
-
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Modal, TextInput, Button, Alert, ScrollView } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
 import Header from '../components/Header';
 
 // Mock data for teachers
@@ -84,106 +77,56 @@ const teachers = [
     description: 'Focuses on organic, inorganic, and physical chemistry.',
     imageUrl: 'https://example.com/teacher9.jpg',
   },
-  {
-    id: '10',
-    name: 'Ms. Sunita Yadav',
-    subject: 'Biology (Class 9 - 12)',
-    price: '₹2,000 per month',
-    description: 'Expert in botany, zoology, and human anatomy.',
-    imageUrl: 'https://example.com/teacher10.jpg',
-  },
 ];
 
 const TeacherScreen = () => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [slotModalVisible, setSlotModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTeachers, setFilteredTeachers] = useState(teachers);
-  const [addressDetails, setAddressDetails] = useState({
-    houseNumber: '',
-    landmark: '',
-    name: '',
-    gender: '',
-    location: '',
-  });
+  const [genderFilter, setGenderFilter] = useState('');
+  const [subjectFilter, setSubjectFilter] = useState('');
+  const [classTypeFilter, setClassTypeFilter] = useState('');
+  const [showFilters, setShowFilters] = useState(true); // State to show/hide filters
 
-  const [availableDates, setAvailableDates] = useState([]);
+  const subjects = [
+    'Mathematics', 'English', 'Science', 'History', 'Geography', 'Hindi', 
+    'Computer Science', 'Economics', 'Chemistry', 'Biology'
+  ];
+  
+  const classes = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
 
-  useEffect(() => {
-    // Dynamically generate dates for the entire month
-    const generateDates = () => {
-      const today = new Date();
-      const dates = [];
-      for (let i = 0; i < 3; i++) {
-        const nextDate = new Date(today);
-        nextDate.setDate(today.getDate() + i);
-        const dateString = nextDate.toDateString().split(' ').slice(0, 3).join(' '); // e.g., "Wed Sep 27"
-        dates.push(dateString);
-      }
-      setAvailableDates(dates);
-    };
-    generateDates();
-  }, []);
+  const applyFilters = () => {
+    let filteredData = teachers;
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
-  const openSlotModal = () => {
-    setSlotModalVisible(true);
-  };
-
-  const closeSlotModal = () => {
-    setSlotModalVisible(false);
-  };
-
-  const onBook = () => {
-    if (!selectedDate || !selectedTime) {
-      Alert.alert('Error', 'Please select a date and time slot.');
-      return;
+    // Apply gender filter
+    if (genderFilter) {
+      filteredData = filteredData.filter(teacher => {
+        if (genderFilter === 'Male') {
+          return teacher.name.startsWith('Mr.');
+        } else if (genderFilter === 'Female') {
+          return teacher.name.startsWith('Ms.') || teacher.name.startsWith('Mrs.');
+        }
+        return true;
+      });
     }
 
-    // Show a confirmation message with user details
-    Alert.alert(
-      'Booking Confirmed',
-      `Name: ${addressDetails.name}\nGender: ${addressDetails.gender}\nLocation: ${addressDetails.location}\nHouse/Flat: ${addressDetails.houseNumber}\nDate: ${selectedDate}\nTime: ${selectedTime}\n\nYour selected teacher will arrive as scheduled!`
-    );
+    // Apply subject filter
+    if (subjectFilter) {
+      filteredData = filteredData.filter(teacher =>
+        teacher.subject.toLowerCase().includes(subjectFilter.toLowerCase())
+      );
+    }
 
-    closeSlotModal();
-  };
+    // Apply class filter
+    if (classTypeFilter) {
+      filteredData = filteredData.filter(teacher =>
+        teacher.subject.toLowerCase().includes(`class ${classTypeFilter}`)
+      );
+    }
 
-  // Open Date Picker Modal
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  // Close Date Picker Modal
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  // Handle Date Picked from Calendar
-  const handleConfirm = (date) => {
-    const dateString = date.toDateString().split(' ').slice(0, 3).join(' ');
-    setSelectedDate(dateString);
-    hideDatePicker();
-  };
-
-  // Filter teachers based on the subject entered in the search bar
-  useEffect(() => {
-    const filteredData = teachers.filter(teacher =>
-      teacher.subject.toLowerCase().includes(searchQuery.toLowerCase())
-    );
     setFilteredTeachers(filteredData);
-  }, [searchQuery]);
+    setShowFilters(false); // Hide filters after applying
+  };
 
   const renderTeacher = ({ item }) => (
     <View style={styles.card}>
@@ -192,11 +135,6 @@ const TeacherScreen = () => {
         <Text style={styles.text}>{item.subject}</Text>
         <Text style={styles.text}>{item.price}</Text>
         <Text style={styles.description}>{item.description}</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={openModal}>
-          <Text style={styles.addButtonText}>Add</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.imageContainer}>
         <Image
@@ -207,10 +145,103 @@ const TeacherScreen = () => {
     </View>
   );
 
+  const clearFilters = () => {
+    setGenderFilter('');
+    setSubjectFilter('');
+    setClassTypeFilter('');
+    setShowFilters(true); // Show filters again
+    setFilteredTeachers(teachers); // Reset to original data
+  };
+
   return (
     <>
       <Header />
       <View style={styles.container}>
+        {/* Filter Section */}
+        <Text style={styles.filterTitle}>Filter Teachers</Text>
+
+        {/* Toggle Filters Visibility */}
+        {showFilters && (
+          <View>
+            {/* Gender Filter */}
+            <Text style={styles.filterLabel}>Select Gender:</Text>
+            <View style={styles.filterRow}>
+              <TouchableOpacity
+                style={[styles.filterButton, genderFilter === 'Male' && styles.selectedFilter]}
+                onPress={() => setGenderFilter('Male')}
+              >
+                <Text style={styles.filterButtonText}>Male</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.filterButton, genderFilter === 'Female' && styles.selectedFilter]}
+                onPress={() => setGenderFilter('Female')}
+              >
+                <Text style={styles.filterButtonText}>Female</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Subject Filter */}
+            <Text style={styles.filterLabel}>Select Subject:</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
+              {subjects.map((subject, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[styles.filterButton, subjectFilter === subject && styles.selectedFilter]}
+                  onPress={() => setSubjectFilter(subject)}
+                >
+                  <Text style={styles.filterButtonText}>{subject}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            {/* Class Type Filter */}
+            <Text style={styles.filterLabel}>Select Class Type:</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
+              {classes.map((classType, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[styles.filterButton, classTypeFilter === classType && styles.selectedFilter]}
+                  onPress={() => setClassTypeFilter(classType)}
+                >
+                  <Text style={styles.filterButtonText}>Class {classType}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            {/* Apply Button */}
+            <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
+              <Text style={styles.applyButtonText}>Apply Filters</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Display Selected Filters */}
+        {!showFilters && (
+          <View style={styles.selectedFiltersContainer}>
+            {genderFilter && (
+              <View style={styles.selectedFilterTag}>
+                <Text style={styles.selectedFilterText}>{genderFilter}</Text>
+                <TouchableOpacity onPress={() => setGenderFilter('')}><Text style={styles.removeFilterText}>X</Text></TouchableOpacity>
+              </View>
+            )}
+            {subjectFilter && (
+              <View style={styles.selectedFilterTag}>
+                <Text style={styles.selectedFilterText}>{subjectFilter}</Text>
+                <TouchableOpacity onPress={() => setSubjectFilter('')}><Text style={styles.removeFilterText}>X</Text></TouchableOpacity>
+              </View>
+            )}
+            {classTypeFilter && (
+              <View style={styles.selectedFilterTag}>
+                <Text style={styles.selectedFilterText}>Class {classTypeFilter}</Text>
+                <TouchableOpacity onPress={() => setClassTypeFilter('')}><Text style={styles.removeFilterText}>X</Text></TouchableOpacity>
+              </View>
+            )}
+            <TouchableOpacity style={styles.clearFiltersButton} onPress={clearFilters}>
+              <Text style={styles.clearFiltersText}>Clear Filters</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {/* Search Bar */}
         <TextInput
           style={styles.searchInput}
@@ -219,6 +250,7 @@ const TeacherScreen = () => {
           onChangeText={setSearchQuery}
         />
 
+        {/* Teacher List */}
         <FlatList
           data={filteredTeachers}
           renderItem={renderTeacher}
@@ -226,123 +258,6 @@ const TeacherScreen = () => {
           contentContainerStyle={{ paddingBottom: 20 }}
         />
       </View>
-
-      {/* Modal for entering address details */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Enter Details</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="House/Flat Number"
-              value={addressDetails.houseNumber}
-              onChangeText={(text) => setAddressDetails({ ...addressDetails, houseNumber: text })}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Landmark (Optional)"
-              value={addressDetails.landmark}
-              onChangeText={(text) => setAddressDetails({ ...addressDetails, landmark: text })}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              value={addressDetails.name}
-              onChangeText={(text) => setAddressDetails({ ...addressDetails, name: text })}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Gender"
-              value={addressDetails.gender}
-              onChangeText={(text) => setAddressDetails({ ...addressDetails, gender: text })}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Location"
-              value={addressDetails.location}
-              onChangeText={(text) => setAddressDetails({ ...addressDetails, location: text })}
-            />
-
-            <View style={styles.modalButtons}>
-              <Button title="Next" onPress={() => { closeModal(); openSlotModal(); }} />
-              <Button title="Cancel" onPress={closeModal} color="red" />
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Modal for selecting date and time slots */}
-      <Modal
-        visible={slotModalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={closeSlotModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.slotModalContent}>
-            <Text style={styles.modalTitle}>When should the teacher arrive?</Text>
-            <Text style={styles.subText}>Your class will take approx. 1 hr</Text>
-
-            {/* Date Selection */}
-            <View style={styles.dateContainer}>
-              {availableDates.map((date, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.dateBox,
-                    selectedDate === date && styles.selectedDateBox,
-                  ]}
-                  onPress={() => setSelectedDate(date)}
-                >
-                  <Text style={[styles.dateText, selectedDate === date && styles.selectedDateText]}>
-                    {date}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <TouchableOpacity style={styles.calendarButton} onPress={showDatePicker}>
-              <Icon name="calendar" size={24} color="#fff" style={styles.calendarIcon} />
-            </TouchableOpacity>
-
-            {/* Time Slot Selection */}
-            <Text style={styles.subText}>Select start time of class</Text>
-            <ScrollView contentContainerStyle={styles.timeContainer}>
-              {['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM'].map((time) => (
-                <TouchableOpacity
-                  key={time}
-                  style={[
-                    styles.timeSlot,
-                    selectedTime === time && styles.selectedTimeSlot,
-                  ]}
-                  onPress={() => setSelectedTime(time)}
-                >
-                  <Text style={[styles.timeSlotText, selectedTime === time && styles.selectedTimeSlotText]}>
-                    {time}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-
-            <View style={styles.modalButtons}>
-              <Button title="Book" onPress={onBook} />
-              <Button title="Cancel" onPress={closeSlotModal} color="red" />
-            </View>
-          </View>
-        </View>
-
-        {/* Date Picker Modal */}
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-        />
-      </Modal>
     </>
   );
 };
@@ -351,7 +266,52 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
+  },
+  filterTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#333',
+  },
+  filterLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#555',
+  },
+  filterRow: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  filterButton: {
+    padding: 10,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  filterButtonText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  selectedFilter: {
+    backgroundColor: '#4CAF50',
+    borderColor: '#4CAF50',
+  },
+  scrollView: {
+    marginBottom: 10,
+  },
+  applyButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  applyButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   searchInput: {
     height: 40,
@@ -364,7 +324,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
@@ -380,6 +340,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#222',
   },
   text: {
     fontSize: 14,
@@ -391,17 +352,6 @@ const styles = StyleSheet.create({
     color: '#999',
     marginTop: 8,
   },
-  addButton: {
-    marginTop: 10,
-    backgroundColor: '#007BFF',
-    paddingVertical: 6,
-    borderRadius: 4,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
   imageContainer: {
     justifyContent: 'center',
   },
@@ -410,101 +360,37 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  selectedFiltersContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginVertical: 10,
   },
-  modalContent: {
-    width: 300,
-    padding: 20,
-    backgroundColor: '#fff',
+  selectedFilterTag: {
+    backgroundColor: '#D3E5FF',
+    padding: 5,
     borderRadius: 8,
-    elevation: 5,
+    marginRight: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  modalTitle: {
-    fontSize: 18,
+  selectedFilterText: {
+    color: '#007BFF',
+    marginRight: 5,
+  },
+  removeFilterText: {
+    color: '#FF5C5C',
     fontWeight: 'bold',
-    marginBottom: 15,
   },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  slotModalContent: {
-    width: 350,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    elevation: 5,
-  },
-  subText: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 10,
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  dateBox: {
+  clearFiltersButton: {
+    backgroundColor: '#FF5C5C',
     padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 8,
-    marginBottom: 10,
-  },
-  selectedDateBox: {
-    borderColor: '#4CAF50',
-    backgroundColor: '#4CAF50',
-  },
-  dateText: {
-    fontSize: 14,
-  },
-  selectedDateText: {
-    color: '#fff',
-  },
-  calendarButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 50,
     alignItems: 'center',
-    alignSelf: 'center',
-    marginBottom: 20,
   },
-  timeContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  timeSlot: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  selectedTimeSlot: {
-    borderColor: '#4CAF50',
-    backgroundColor: '#4CAF50',
-  },
-  timeSlotText: {
-    fontSize: 14,
-  },
-  selectedTimeSlotText: {
+  clearFiltersText: {
     color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

@@ -40,6 +40,9 @@ import KidsLunchScreen from "./src/BookingScreen/KidsLunchScreen";
 import DriverScreen from "./src/BookingScreen/DriverScreen";
 import TeacherScreen from "./src/BookingScreen/TeacherScreen";
 import NurseScreen from "./src/BookingScreen/NurseScreen";
+import PhysioScreen from "./src/BookingScreen/PhysioScreen";
+import EventCrewsScreen from "./src/BookingScreen/EventCrewsScreen";
+import WelcomeScreen from "./src/components/FirstScreen";
 
  
 
@@ -58,6 +61,9 @@ const MyHomeStack = () => {
       <Stack.Screen name="ReferShare" component={ReferShare} />
       <Stack.Screen name="signup" component={Signup} />
       <Stack.Screen name="signin" component={Signin} />
+      <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+       
+      
       {/* Home page Category Screen  */}
       {/* <Stack.Screen  name="FirstScreen" component={FirstScreen} />
        */}
@@ -98,34 +104,8 @@ const MyHomeStack = () => {
       <Stack.Screen name="DriverScreen" component={DriverScreen} />
       <Stack.Screen name="TeacherScreen" component={TeacherScreen} />
       <Stack.Screen name="NurseScreen" component={NurseScreen} />
-      
- 
-      
-
-       
-
-
-      
-
-       
-      
-      
-      
-
-       
-       
-
-       
-      
-       
-
-
-       
-
-
-       
-
-      
+      <Stack.Screen name="PhysioScreen" component={PhysioScreen} /> 
+      <Stack.Screen name="EventCrewsScreen" component={EventCrewsScreen} /> 
     </Stack.Navigator>
   );
 };
@@ -148,215 +128,7 @@ const App = () => {
   };
 
   return (
-    // <NavigationContainer>
-    //   <CartProvider>
-    //     <Tab.Navigator
-    //       screenOptions={{
-    //         headerShown: false,
-    //         tabBarShowLabel: false,
-    //         tabBarStyle: {
-    //           backgroundColor: "#007BFF", // Set blue background color for tab bar
-    //           borderTopWidth: 0, // Remove border for a clean look
-    //         },
-    //       }}
-    //     >
-    //       <Tab.Screen
-    //         name="HOME_STACK"
-    //         component={MyHomeStack}
-    //         options={{
-    //           tabBarIcon: ({ focused, size }) => {
-    //             if (focused) {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/focused/home.png")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             } else {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/normal/home.png")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             }
-    //           },
-    //         }}
-    //       />
-    //       <Tab.Screen
-    //         name="CATEGORIES"
-    //         component={MyHomeStack}
-    //         options={{
-    //           tabBarIcon: ({ focused, size }) => {
-    //             if (focused) {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/focused/cat.jpeg")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             } else {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/focused/cat.jpeg")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             }
-    //           },
-    //         }}
-    //       />
-    //       <Tab.Screen
-    //         name="isfav"
-    //         component={IsFav}
-    //         options={{
-    //           tabBarIcon: ({ focused, size }) => {
-    //             const { cartItems } = useContext(CartContext);
-    //             if (focused) {
-    //               return (
-    //                 <View style={{ position: "relative" }}>
-    //                   <Image
-    //                     source={require("./src/assets/focused/basket.jpeg")}
-    //                     style={{
-    //                       height: size,
-    //                       width: size,
-    //                       resizeMode: "center",
-    //                     }}
-    //                   />
-    //                   <View
-    //                     style={{
-    //                       position: "absolute",
-    //                       right: -3,
-    //                       bottom: 22,
-    //                       height: 14,
-    //                       width: 14,
-    //                       backgroundColor: "#E96E6E",
-    //                       borderRadius: 7,
-    //                       alignItems: "center",
-    //                       justifyContent: "center",
-    //                     }}
-    //                   >
-    //                     <Text style={{ color: "white", fontSize: 10 }}>
-    //                       {favorites.length}
-    //                     </Text>
-    //                   </View>
-    //                 </View>
-    //               );
-    //             } else {
-    //               return (
-    //                 <View style={{ position: "relative" }}>
-    //                   <Image
-    //                     source={require("./src/assets/normal/reorder.png")}
-    //                     style={{
-    //                       height: size,
-    //                       width: size,
-    //                       resizeMode: "center",
-    //                     }}
-    //                   />
-    //                   <View
-    //                     style={{
-    //                       position: "absolute",
-    //                       right: -3,
-    //                       bottom: 22,
-    //                       height: 14,
-    //                       width: 14,
-    //                       backgroundColor: "#C0C0C0",
-    //                       borderRadius: 7,
-    //                       alignItems: "center",
-    //                       justifyContent: "center",
-    //                     }}
-    //                   >
-    //                     <Text style={{ color: "white", fontSize: 10 }}>
-    //                       {favorites.length}
-    //                     </Text>
-    //                   </View>
-    //                 </View>
-    //               );
-    //             }
-    //           },
-    //         }}
-    //       />
-    //       <Tab.Screen
-    //         name="REORDER"
-    //         component={ReorderScreen}
-    //         options={{
-    //           tabBarIcon: ({ focused, size }) => {
-    //             if (focused) {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/focused/reorder.png")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             } else {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/normal/reorder.png")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             }
-    //           },
-    //         }}
-    //       />
-    //       <Tab.Screen
-    //         name="ACCOUNT"
-    //         component={AccountScreen}
-    //         options={{
-    //           tabBarIcon: ({ focused, size }) => {
-    //             if (focused) {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/focused/account.png")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             } else {
-    //               return (
-    //                 <Image
-    //                   source={require("./src/assets/normal/account.png")}
-    //                   style={{
-    //                     height: size,
-    //                     width: size,
-    //                     resizeMode: "center",
-    //                   }}
-    //                 />
-    //               );
-    //             }
-    //           },
-    //         }}
-    //       />
-    //     </Tab.Navigator>
-    //   </CartProvider>
-    // </NavigationContainer>
+ 
  
 
     <NavigationContainer>

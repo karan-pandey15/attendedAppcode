@@ -11,7 +11,7 @@ const Header = ({ isCart }) => {
   };
 
   const handleCartNavigate = () => {
-    navigation.navigate("CART"); // Navigate to Cart screen
+    navigation.navigate("#"); // Navigate to Cart screen
   };
 
   const handleFavoritesNavigate = () => {
@@ -40,8 +40,9 @@ const Header = ({ isCart }) => {
       <View style={styles.rightIconsContainer}>
         {/* Cart Icon */}
         <TouchableOpacity style={styles.iconButton} onPress={handleCartNavigate}>
-          <Ionicons name="cart-outline" size={24} color="#007BFF" />
-        </TouchableOpacity>
+  <Ionicons name="notifications-outline" size={24} color="#007BFF" />
+</TouchableOpacity>
+
         {/* Favorites/Wishlist Icon */}
         <TouchableOpacity style={styles.iconButton} onPress={handleFavoritesNavigate}>
           <Ionicons name="heart-outline" size={24} color="#007BFF" />

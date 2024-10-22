@@ -19,17 +19,21 @@ const RoundTags = () => {
       </Text>
 
       <View style={styles.row}>
-        <ImageContainer name="Attendant" imageSource={require('../assets/images/helper.jpg')} onPress={() => handleImagePress('#')} />
-        <ImageContainer name="Driver" imageSource={require('../assets/images/taxi.jpeg')} onPress={() => handleImagePress('DriverScreen')} />
-        <ImageContainer name="Driving Teacher" imageSource={require('../assets/images/driver.jpeg')} onPress={() => handleImagePress('DrivingTeacherScreen')} />
-        <ImageContainer name="Gym Trainer" imageSource={require('../assets/images/gym.jpeg')} onPress={() => handleImagePress('TrainerScreen')} />
+        <ImageContainer name="Attendant" imageSource={require('../assets/images/attendedimg.jpg')} onPress={() => handleImagePress('#')} />
+        <ImageContainer name="Nurse" imageSource={require('../assets/images/nurse.jpeg')} onPress={() => handleImagePress('NurseScreen')}/>
+
+        <ImageContainer name="Physio therapist" imageSource={require('../assets/images/physiio.png')} onPress={() => handleImagePress('PhysioScreen')} />
+        <ImageContainer name="Event Crews" imageSource={require('../assets/images/evnetcrieww.png')} onPress={() => handleImagePress('EventCrewsScreen')} />
+
+        
       </View>
 
       <View style={styles.row}>
         <ImageContainer name="Skating Trainer" imageSource={require('../assets/images/skating.jpeg')} onPress={() => handleImagePress('SkatingTrainerScreen')} />
         <ImageContainer name="Boxing Coach" imageSource={require('../assets/images/boxing.jpeg')} onPress={() => handleImagePress('BoxingCoachScreen')} />
+        <ImageContainer name="Driving Teacher" imageSource={require('../assets/images/driver.jpeg')} onPress={() => handleImagePress('DrivingTeacherScreen')} />
         <ImageContainer name="Tution Teacher" imageSource={require('../assets/images/tutionteacher.jpeg')} onPress={() => handleImagePress('TeacherScreen')} />
-        <ImageContainer name="Dance Teacher" imageSource={require('../assets/images/danceteacher.jpeg')} onPress={() => handleImagePress('DanceTeacherScreen')} />
+        
       </View>
 
       {/* <View style={styles.row}>
@@ -39,18 +43,19 @@ const RoundTags = () => {
 
       </View> */}
 
-      <View style={styles.leftrow}>
-        <ImageContainer
-          name="Nurse- Injection/Dressing"
-          imageSource={require('../assets/images/nurse.jpeg')}
-          onPress={() => handleImagePress('NurseScreen')}
-        />
+      <View style={styles.row}>
+        
+      <ImageContainer name="Gym Trainer" imageSource={require('../assets/images/gym.jpeg')} onPress={() => handleImagePress('TrainerScreen')} />
+        <ImageContainer name="Driver" imageSource={require('../assets/images/taxi.jpeg')} onPress={() => handleImagePress('DriverScreen')} />
 
-        <ImageContainer
+        <ImageContainer name="Dance Teacher" imageSource={require('../assets/images/danceteacher.jpeg')} onPress={() => handleImagePress('DanceTeacherScreen')} />
+        <ImageContainer name="Driver" imageSource={require('../assets/images/taxi.jpeg')} onPress={() => handleImagePress('DriverScreen')} />
+        
+        {/* <ImageContainer
           name="Solar Enquiry"
           imageSource={require('../assets/images/solar.jpg')}
           onPress={() => handleImagePress('SolarEnquiryScreen')}
-        />
+        /> */}
       </View>
 
 
